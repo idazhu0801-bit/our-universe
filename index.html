@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <title>Our Universe ✦</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital@0;1&family=Noto+Serif+SC:wght@300;400&family=DM+Serif+Display:ital@0;1&display=swap');
@@ -62,9 +62,9 @@ canvas#starfield{position:absolute;inset:0;width:100%;height:100%;}
 
 /* PANEL */
 #panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(12px);z-index:900;display:none;align-items:center;justify-content:center;}
-.panel{background:rgba(12,10,28,0.97);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:32px 36px;max-width:580px;width:92%;max-height:88vh;overflow-y:auto;position:relative;}
+.panel{background:rgba(12,10,28,0.97);border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:32px 36px;max-width:620px;width:92%;max-height:88vh;overflow-y:auto;position:relative;}
 .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,0.07) 0,rgba(255,255,255,0.07) 4px,transparent 4px,transparent 10px);}
-.panel-close{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;font-family:'Space Mono',monospace;}
+.panel-close{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;font-family:'Space Mono',monospace;z-index:10;}
 .panel-close:hover{color:#fff;}
 .panel-hed{font-family:'DM Serif Display',serif;font-style:italic;font-size:24px;color:#f5f0e8;margin-bottom:2px;}
 .panel-sub{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:4px;color:rgba(255,255,255,0.28);margin-bottom:18px;text-transform:uppercase;}
@@ -76,7 +76,7 @@ canvas#starfield{position:absolute;inset:0;width:100%;height:100%;}
 .empty-state{text-align:center;padding:28px 0;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.15);}
 
 /* CARDS */
-.mc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;gap:14px;align-items:flex-start;}
+.mc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;gap:14px;align-items:flex-start;position:relative;}
 .mc:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);}
 .mc-thumb{width:52px;height:52px;flex-shrink:0;border-radius:2px;overflow:hidden;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:22px;}
 .mc-thumb img{width:100%;height:100%;object-fit:cover;filter:sepia(0.2) contrast(1.1);}
@@ -87,13 +87,23 @@ canvas#starfield{position:absolute;inset:0;width:100%;height:100%;}
 .tag-m{background:rgba(180,200,240,0.1);color:#b4c8f0;border:1px solid rgba(180,200,240,0.18);}
 .tag-w{background:rgba(240,180,200,0.1);color:#f0b4c8;border:1px solid rgba(240,180,200,0.18);}
 
+/* Card action buttons */
+.mc-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity 0.2s;}
+.mc:hover .mc-actions{opacity:1;}
+.mc-edit,.mc-delete{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:2px;color:rgba(255,255,255,0.4);font-size:10px;padding:3px 6px;cursor:pointer;font-family:'Space Mono',monospace;transition:all 0.15s;}
+.mc-edit:hover{background:rgba(100,180,255,0.2);border-color:rgba(100,180,255,0.4);color:#a0d0ff;}
+.mc-delete:hover{background:rgba(255,100,100,0.2);border-color:rgba(255,100,100,0.4);color:#ffa0a0;}
+
 /* FORM */
 .add-btn{width:100%;padding:11px;background:transparent;border:1px dashed rgba(255,255,255,0.1);border-radius:2px;color:rgba(255,255,255,0.28);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;cursor:pointer;text-align:center;margin-top:8px;transition:all 0.2s;}
 .add-btn:hover{border-color:rgba(255,255,255,0.28);color:rgba(255,255,255,0.6);}
 .add-form{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
-.add-form input,.add-form textarea{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:2px;color:#e8e0f0;padding:10px 12px;font-family:'Noto Serif SC',serif;font-size:12px;outline:none;transition:border-color 0.2s;width:100%;}
-.add-form input:focus,.add-form textarea:focus{border-color:rgba(255,255,255,0.28);}
+.add-form input,.add-form textarea,.add-form select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:2px;color:#e8e0f0;padding:10px 12px;font-family:'Noto Serif SC',serif;font-size:12px;outline:none;transition:border-color 0.2s;width:100%;}
+.add-form input:focus,.add-form textarea:focus,.add-form select:focus{border-color:rgba(255,255,255,0.28);}
 .add-form textarea{height:90px;resize:none;}
+.coord-row{display:flex;gap:10px;}
+.coord-row input{flex:1;}
+.coord-hint{font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:1px;margin-top:-5px;}
 .img-upload-label{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:2px;padding:10px 14px;cursor:pointer;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);transition:border-color 0.2s;}
 .img-upload-label:hover{border-color:rgba(255,255,255,0.25);}
 .img-upload-label input{display:none;}
@@ -102,6 +112,8 @@ canvas#starfield{position:absolute;inset:0;width:100%;height:100%;}
 .save-btn:hover{background:rgba(255,255,255,0.12);}
 .save-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .err-msg{font-family:'Space Mono',monospace;font-size:9px;color:#f0b4c8;letter-spacing:1px;text-align:center;}
+.cancel-btn{background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:2px;color:rgba(255,255,255,0.4);padding:8px;font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;margin-top:5px;}
+.cancel-btn:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);}
 
 /* DETAIL */
 .detail-img{width:100%;border-radius:2px;margin-bottom:18px;filter:sepia(0.2) contrast(1.08);display:block;}
@@ -110,10 +122,27 @@ canvas#starfield{position:absolute;inset:0;width:100%;height:100%;}
 .detail-body{font-size:13px;line-height:2;color:rgba(255,255,255,0.68);}
 .back-btn{background:none;border:none;color:rgba(255,255,255,0.28);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;cursor:pointer;margin-bottom:18px;padding:0;text-transform:uppercase;}
 .back-btn:hover{color:#fff;}
+.detail-actions{display:flex;gap:10px;margin-top:20px;}
+.detail-actions button{flex:1;padding:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:2px;color:rgba(255,255,255,0.5);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;}
+.detail-actions button:hover{background:rgba(255,255,255,0.08);color:#fff;}
 
 /* MAP */
-#map-wrap{width:100%;height:300px;border-radius:2px;overflow:hidden;margin-top:14px;background:#0d0b1e;}
-.pin-label{font-family:'Space Mono',monospace;font-size:8px;fill:rgba(255,255,255,0.45);}
+#map-wrap{width:100%;height:300px;border-radius:2px;overflow:hidden;margin-top:14px;background:#0d0b1e;position:relative;}
+.map-svg-container{width:100%;height:100%;}
+.map-pin{cursor:pointer;transition:transform 0.2s,filter 0.2s;}
+.map-pin:hover{transform:scale(1.5);filter:drop-shadow(0 0 8px rgba(255,200,220,0.8));}
+.pin-label{font-family:'Space Mono',monospace;font-size:8px;fill:rgba(255,255,255,0.45);pointer-events:none;}
+.map-legend{position:absolute;bottom:8px;left:8px;font-family:'Space Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);letter-spacing:1px;}
+
+/* Confirm Dialog */
+#confirm-dialog{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);}
+.confirm-box{background:rgba(20,15,35,0.98);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:24px 32px;max-width:320px;text-align:center;}
+.confirm-box p{font-size:13px;color:#e8e0f0;margin-bottom:20px;}
+.confirm-actions{display:flex;gap:12px;justify-content:center;}
+.confirm-actions button{padding:8px 24px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:2px;color:#fff;font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;transition:all 0.15s;}
+.confirm-actions .btn-danger{background:rgba(255,80,80,0.15);border-color:rgba(255,80,80,0.3);color:#ffb0b0;}
+.confirm-actions .btn-danger:hover{background:rgba(255,80,80,0.25);}
+.confirm-actions .btn-cancel:hover{background:rgba(255,255,255,0.1);}
 </style>
 </head>
 <body>
@@ -178,19 +207,43 @@ canvas#starfield{position:absolute;inset:0;width:100%;height:100%;}
   </div>
 </div>
 
+<!-- Confirm Dialog -->
+<div id="confirm-dialog" onclick="if(event.target===this)hideConfirm()">
+  <div class="confirm-box">
+    <p id="confirm-msg">确定要删除吗？</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="hideConfirm()">取消</button>
+      <button class="btn-danger" id="confirm-ok">删除</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── SUPABASE CONFIG ────────────────────────────────────────────────────────
 const SUPA_URL = 'https://rnwiwfbuqujllrbikfax.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJud2l3ZmJ1cXVqbGxyYmlrZmF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NTU4NTksImV4cCI6MjA5MjMzMTg1OX0.HFXp6EDepkMngq4Rm5T5uFRJ64s2PwZcVMcLq23z_jA';
 
+// 中文 Base64 编解码辅助函数
+function utf8ToBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function base64ToUtf8(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+
 async function sbFetch(path, opts={}){
-  const res = await fetch(SUPA_URL+path, {
-    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
-    ...opts
-  });
-  if(!res.ok){const e=await res.text();throw new Error(e);}
-  const txt=await res.text();
-  return txt?JSON.parse(txt):[];
+  try {
+    const res = await fetch(SUPA_URL+path, {
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
+      ...opts
+    });
+    if(!res.ok){const e=await res.text();throw new Error(e);}
+    const txt=await res.text();
+    return txt?JSON.parse(txt):[];
+  } catch(err) {
+    console.error('Supabase 请求失败:', err);
+    throw err;
+  }
 }
 
 async function getEntries(section){
@@ -198,6 +251,12 @@ async function getEntries(section){
 }
 async function addEntry(entry){
   return sbFetch('/rest/v1/memories',{method:'POST',body:JSON.stringify(entry)});
+}
+async function updateEntry(id, entry){
+  return sbFetch(`/rest/v1/memories?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(entry)});
+}
+async function deleteEntry(id){
+  return sbFetch(`/rest/v1/memories?id=eq.${id}`,{method:'DELETE'});
 }
 
 // ── SECTIONS ───────────────────────────────────────────────────────────────
@@ -207,7 +266,22 @@ const SEC = {
   wishes:  {title:'未来愿望',eng:'Wishes & Dreams',emoji:'✨',desc:'还没去的地方，还没说出口的约定。',tagCls:'tag-w',tagLabel:'愿望'},
   capsule: {title:'时光胶囊',eng:'Time Capsule',emoji:'💌',desc:'写给未来的你们，封存在这里。',tagCls:'tag-w',tagLabel:'胶囊'},
 };
-let activeSection=null,showForm=false,imgDataUrl=null;
+let activeSection=null, showForm=false, imgDataUrl=null, editingId=null, currentEntries=[];
+
+// ── CONFIRM DIALOG ─────────────────────────────────────────────────────────
+let confirmCallback=null;
+function showConfirm(msg, callback){
+  document.getElementById('confirm-msg').textContent=msg;
+  confirmCallback=callback;
+  document.getElementById('confirm-dialog').style.display='flex';
+}
+function hideConfirm(){
+  document.getElementById('confirm-dialog').style.display='none';
+  confirmCallback=null;
+}
+document.getElementById('confirm-ok').onclick=()=>{
+  if(confirmCallback){confirmCallback();hideConfirm();}
+};
 
 // ── DATE STAMP ─────────────────────────────────────────────────────────────
 (()=>{const d=new Date();document.getElementById('dstamp').textContent=`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;})();
@@ -250,6 +324,11 @@ function initStarfield(){
   }
   requestAnimationFrame(draw);
 }
+
+window.addEventListener('resize',()=>{
+  const c=document.getElementById('starfield');
+  if(c){c.width=window.innerWidth;c.height=window.innerHeight;}
+});
 
 // ── FLY-IN ─────────────────────────────────────────────────────────────────
 function doFlyIn(section,type){
@@ -303,39 +382,75 @@ async function openMapPanel(){
   activeSection='map';
   document.getElementById('panel-content').innerHTML=`<div class="panel-hed">🌍 Our World</div><div class="panel-sub">PLACES WE'VE BEEN</div><div class="loading-state">LOADING MAP...</div>`;
   document.getElementById('panel-overlay').style.display='flex';
+  
   let pins=[];
-  try{const all=await getEntries('memories');pins=all.filter(m=>m.lat&&m.lng);}catch(e){}
+  try{const all=await getEntries('memories');pins=all.filter(m=>m.lat&&m.lng);}catch(e){
+    document.getElementById('panel-content').innerHTML=`<div class="panel-hed">🌍 Our World</div><div class="panel-sub">PLACES WE'VE BEEN</div><div class="err-msg">⚠ 无法加载地图数据，请检查网络或数据库连接</div>`;
+    return;
+  }
+  
   document.getElementById('panel-content').innerHTML=`
     <div class="panel-hed">🌍 Our World</div>
     <div class="panel-sub">PLACES WE'VE BEEN</div>
-    <div class="panel-desc">每一个去过的地方，都是你们故事里的一颗星。</div>
+    <div class="panel-desc">每一个去过的地方，都是你们故事里的一颗星。点击标记查看记忆。</div>
     <div id="map-wrap">${buildMapSVG(pins)}</div>
     <div style="margin-top:12px;font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:2px;">${pins.length} PLACES VISITED</div>`;
+  
+  // 使用事件委托绑定地图点击事件
+  const mapWrap = document.getElementById('map-wrap');
+  if(mapWrap) {
+    mapWrap.addEventListener('click', (e) => {
+      const pin = e.target.closest('.map-pin');
+      if(pin) {
+        const id = pin.dataset.id;
+        const entry = pins.find(p => p.id == id);
+        if(entry) openMapDetail(entry);
+      }
+    });
+  }
 }
 
 function buildMapSVG(pins){
-  const p=pins.map(m=>`
-    <circle cx="${lx(m.lng)}" cy="${ly(m.lat)}" r="5" fill="#f0c4d4" opacity="0.9"/>
-    <text class="pin-label" x="${lx(m.lng)+8}" y="${ly(m.lat)+3}">${m.place||''}</text>`).join('');
-  return `<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#0d0b1e;">
-  <path d="M80,78 Q125,58 162,68 Q182,78 187,108 Q192,140 174,168 Q158,194 138,200 Q116,204 96,188 Q72,173 68,148 Q63,118 80,78Z" fill="rgba(100,120,160,0.32)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
-  <path d="M148,210 Q174,200 190,215 Q206,234 206,270 Q206,310 184,330 Q163,346 146,335 Q128,320 126,294 Q123,263 134,240 Q140,220 148,210Z" fill="rgba(100,120,160,0.28)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
-  <path d="M328,53 Q364,43 390,53 Q406,63 400,84 Q394,105 373,115 Q352,120 333,110 Q316,97 318,76 Q320,60 328,53Z" fill="rgba(100,120,160,0.32)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
-  <path d="M328,124 Q364,114 390,124 Q416,144 416,185 Q416,230 400,260 Q380,285 354,285 Q328,282 313,260 Q298,234 300,194 Q302,154 317,134 Q322,127 328,124Z" fill="rgba(100,120,160,0.28)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
-  <path d="M398,48 Q470,33 542,43 Q602,53 632,73 Q652,93 646,124 Q640,155 608,170 Q572,185 538,182 Q498,178 468,164 Q438,150 418,130 Q396,108 393,83 Q391,63 398,48Z" fill="rgba(100,120,160,0.32)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
-  <path d="M578,238 Q620,226 648,238 Q668,253 665,279 Q660,305 636,315 Q612,322 590,310 Q570,295 570,271 Q570,248 578,238Z" fill="rgba(100,120,160,0.28)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
-  <ellipse cx="648" cy="103" rx="8" ry="14" fill="rgba(100,120,160,0.35)" stroke="rgba(180,200,240,0.15)" stroke-width="0.5"/>
-  <line x1="0" y1="190" x2="800" y2="190" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-  <line x1="400" y1="0" x2="400" y2="380" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-  ${p}
-  </svg>`;
+  const continentPaths=`
+    <path d="M80,78 Q125,58 162,68 Q182,78 187,108 Q192,140 174,168 Q158,194 138,200 Q116,204 96,188 Q72,173 68,148 Q63,118 80,78Z" fill="rgba(100,120,160,0.32)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
+    <path d="M148,210 Q174,200 190,215 Q206,234 206,270 Q206,310 184,330 Q163,346 146,335 Q128,320 126,294 Q123,263 134,240 Q140,220 148,210Z" fill="rgba(100,120,160,0.28)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
+    <path d="M328,53 Q364,43 390,53 Q406,63 400,84 Q394,105 373,115 Q352,120 333,110 Q316,97 318,76 Q320,60 328,53Z" fill="rgba(100,120,160,0.32)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
+    <path d="M328,124 Q364,114 390,124 Q416,144 416,185 Q416,230 400,260 Q380,285 354,285 Q328,282 313,260 Q298,234 300,194 Q302,154 317,134 Q322,127 328,124Z" fill="rgba(100,120,160,0.28)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
+    <path d="M398,48 Q470,33 542,43 Q602,53 632,73 Q652,93 646,124 Q640,155 608,170 Q572,185 538,182 Q498,178 468,164 Q438,150 418,130 Q396,108 393,83 Q391,63 398,48Z" fill="rgba(100,120,160,0.32)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
+    <path d="M578,238 Q620,226 648,238 Q668,253 665,279 Q660,305 636,315 Q612,322 590,310 Q570,295 570,271 Q570,248 578,238Z" fill="rgba(100,120,160,0.28)" stroke="rgba(180,200,240,0.18)" stroke-width="0.5"/>
+    <ellipse cx="648" cy="103" rx="8" ry="14" fill="rgba(100,120,160,0.35)" stroke="rgba(180,200,240,0.15)" stroke-width="0.5"/>
+  `;
+  
+  const pinsHtml=pins.map(m=>{
+    const x=lx(m.lng), y=ly(m.lat);
+    return `<g class="map-pin" data-id="${m.id}" style="cursor:pointer;">
+      <circle cx="${x}" cy="${y}" r="6" fill="#f0c4d4" opacity="0.9" stroke="#fff" stroke-width="0.5"/>
+      <circle cx="${x}" cy="${y}" r="2" fill="#fff" opacity="0.8"/>
+      <text class="pin-label" x="${x+10}" y="${y+4}">${m.place||''}</text>
+    </g>`;
+  }).join('');
+  
+  return `<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#0d0b1e;" class="map-svg-container">
+    ${continentPaths}
+    <line x1="0" y1="190" x2="800" y2="190" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+    <line x1="400" y1="0" x2="400" y2="380" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+    ${pinsHtml}
+  </svg>
+  <div class="map-legend">✦ 点击标记查看记忆</div>`;
 }
-function lx(lng){return((lng+180)/360)*800;}
-function ly(lat){return((90-lat)/180)*380;}
+
+function lx(lng){return ((lng+180)/360)*800;}
+function ly(lat){return ((90-lat)/180)*380;}
+
+function openMapDetail(entry){
+  activeSection='memories';
+  const encodedData = utf8ToBase64(JSON.stringify(entry));
+  openDetail(encodedData);
+}
 
 // ── PANELS ─────────────────────────────────────────────────────────────────
-function openPanel(key){activeSection=key;showForm=false;imgDataUrl=null;renderPanel(key);}
-function closePanel(){document.getElementById('panel-overlay').style.display='none';activeSection=null;showForm=false;imgDataUrl=null;}
+function openPanel(key){activeSection=key; showForm=false; imgDataUrl=null; editingId=null; renderPanel(key);}
+function closePanel(){document.getElementById('panel-overlay').style.display='none';activeSection=null;showForm=false;imgDataUrl=null;editingId=null;}
 function panelBgClick(e){if(e.target===document.getElementById('panel-overlay'))closePanel();}
 
 async function renderPanel(key){
@@ -348,8 +463,11 @@ async function renderPanel(key){
     <div class="loading-state">LOADING...</div>`;
 
   let entries=[];
-  try{entries=await getEntries(key);}catch(err){
-    document.getElementById('panel-content').innerHTML+=`<div class="err-msg">⚠ 数据库未连接，请先在 Supabase 创建 memories 表</div>`;
+  try{entries=await getEntries(key); currentEntries=entries;}catch(err){
+    document.getElementById('panel-content').innerHTML=`
+      <div class="panel-hed">${s.emoji} ${s.title}</div>
+      <div class="panel-sub">${s.eng}</div>
+      <div class="err-msg" style="margin-bottom:12px;">⚠ 数据库未连接，请先在 Supabase 创建 memories 表</div>`;
     showFormOnly(key);return;
   }
 
@@ -358,14 +476,20 @@ async function renderPanel(key){
   <div class="panel-desc">${s.desc}</div>`;
 
   if(!entries.length){html+=`<div class="empty-state">还没有记录 · nothing here yet</div>`;}
-  else{entries.forEach((e,i)=>{
-    html+=`<div class="mc" onclick="openDetail(${JSON.stringify(JSON.stringify(e))})">
+  else{entries.forEach((e)=>{
+    const encodedData = utf8ToBase64(JSON.stringify(e));
+    html+=`<div class="mc" onclick="openDetail('${encodedData}')">
       <div class="mc-thumb">${e.img_url?`<img src="${e.img_url}"/>`:(s.emoji)}</div>
       <div class="mc-body">
         <div class="mc-title">${e.title||'无题'}</div>
         <div class="mc-meta">${e.date||''} ${e.place?'· '+e.place:''}</div>
         <span class="mc-tag ${s.tagCls}">${s.tagLabel}</span>
-      </div></div>`;
+      </div>
+      <div class="mc-actions" onclick="event.stopPropagation()">
+        <button class="mc-edit" onclick="editEntry('${e.id}')">✎</button>
+        <button class="mc-delete" onclick="deleteEntryConfirm('${e.id}')">✕</button>
+      </div>
+    </div>`;
   });}
 
   if(!showForm){html+=`<button class="add-btn" onclick="toggleForm('${key}')">＋ 添加${s.title}</button>`;}
@@ -377,23 +501,41 @@ async function renderPanel(key){
 function showFormOnly(key){
   const s=SEC[key];
   let html=`<div class="panel-hed">${s.emoji} ${s.title}</div><div class="panel-sub">${s.eng}</div>`;
-  html+=`<div class="err-msg" style="margin-bottom:12px;">⚠ 请先完成 Supabase 表格设置（见说明）</div>`;
+  html+=`<div class="err-msg" style="margin-bottom:12px;">⚠ 请先完成 Supabase 表格设置</div>`;
   document.getElementById('panel-content').innerHTML=html;
 }
 
-function formHTML(){
+function formHTML(editData=null){
+  const isEdit=!!editData;
   return `<div class="add-form">
-    <input id="f-title" placeholder="标题 · title"/>
-    <input id="f-date" type="date"/>
-    <input id="f-place" placeholder="地点 · place"/>
-    <input id="f-lat" type="number" step="0.01" placeholder="纬度 latitude (可选)"/>
-    <input id="f-lng" type="number" step="0.01" placeholder="经度 longitude (可选)"/>
-    <textarea id="f-body" placeholder="写下这段故事…"></textarea>
+    <input id="f-title" placeholder="标题 · title" value="${editData?.title||''}"/>
+    <input id="f-date" type="date" value="${editData?.date||''}"/>
+    <input id="f-place" placeholder="地点 · place" value="${editData?.place||''}"/>
+    <div class="coord-row">
+      <input id="f-lat" type="text" placeholder="纬度 (如 33.5°N 或 33.5)" value="${editData?.lat_raw||editData?.lat||''}"/>
+      <input id="f-lng" type="text" placeholder="经度 (如 126.5°E 或 126.5)" value="${editData?.lng_raw||editData?.lng||''}"/>
+    </div>
+    <div class="coord-hint">支持格式: 33.5°N, 126.5°E 或纯数字 33.5, 126.5</div>
+    <textarea id="f-body" placeholder="写下这段故事…">${editData?.body||''}</textarea>
     <label class="img-upload-label"><input type="file" accept="image/*" onchange="handleImg(event)">📷 上传照片</label>
-    <img id="img-preview"/>
-    <button class="save-btn" id="save-btn" onclick="submitEntry()">保存到宇宙 ✦</button>
+    <img id="img-preview" ${editData?.img_url?`src="${editData.img_url}" style="display:block"`:''}/>
+    <button class="save-btn" id="save-btn" onclick="submitEntry()">${isEdit?'更新':'保存到宇宙 ✦'}</button>
+    ${isEdit?'<button class="cancel-btn" onclick="cancelEdit()">取消编辑</button>':''}
     <div id="save-err" class="err-msg"></div>
   </div>`;
+}
+
+function parseCoordinate(str){
+  if(!str)return null;
+  str=str.trim().toUpperCase();
+  const match=str.match(/^([-+]?\d*\.?\d+)\s*[°]?\s*([NS]?)\s*$/);
+  if(match){
+    let val=parseFloat(match[1]);
+    if(match[2]==='S'||match[2]==='W') val=-val;
+    return val;
+  }
+  const num=parseFloat(str);
+  return isNaN(num)?null:num;
 }
 
 function setupImgPreview(){
@@ -407,43 +549,106 @@ function handleImg(e){
   r.readAsDataURL(f);
 }
 
-function toggleForm(key){showForm=!showForm;renderPanel(key||activeSection);}
+function toggleForm(key){showForm=!showForm; editingId=null; imgDataUrl=null; renderPanel(key||activeSection);}
+
+function editEntry(id){
+  const entry=currentEntries.find(e=>e.id==id);
+  if(!entry)return;
+  editingId=id;
+  showForm=true;
+  imgDataUrl=entry.img_url||null;
+  
+  const s=SEC[activeSection];
+  let html=`<div class="panel-hed">${s.emoji} 编辑${s.title}</div>
+  <div class="panel-sub">${s.eng}</div>
+  <div class="panel-desc">修改你的记录</div>`;
+  html+=formHTML(entry);
+  document.getElementById('panel-content').innerHTML=html;
+  setupImgPreview();
+}
+
+function cancelEdit(){
+  editingId=null;
+  showForm=false;
+  imgDataUrl=null;
+  renderPanel(activeSection);
+}
+
+function deleteEntryConfirm(id){
+  showConfirm('确定要删除这条记录吗？此操作不可恢复。', async ()=>{
+    try{
+      await deleteEntry(id);
+      renderPanel(activeSection);
+    }catch(err){
+      alert('删除失败: '+err.message);
+    }
+  });
+}
 
 async function submitEntry(){
   const btn=document.getElementById('save-btn');
   const t=(document.getElementById('f-title')||{}).value?.trim();
   const b=(document.getElementById('f-body')||{}).value?.trim();
   if(!t&&!b)return;
-  btn.disabled=true;btn.textContent='SAVING...';
+  btn.disabled=true; btn.textContent=editingId?'UPDATING...':'SAVING...';
+  
+  const latRaw=(document.getElementById('f-lat')||{}).value?.trim()||'';
+  const lngRaw=(document.getElementById('f-lng')||{}).value?.trim()||'';
+  
   const entry={
     section:activeSection,
-    title:t||'무제',
+    title:t||'无题',
     date:(document.getElementById('f-date')||{}).value||new Date().toISOString().slice(0,10),
     place:(document.getElementById('f-place')||{}).value?.trim()||'',
-    lat:parseFloat((document.getElementById('f-lat')||{}).value)||null,
-    lng:parseFloat((document.getElementById('f-lng')||{}).value)||null,
+    lat:parseCoordinate(latRaw),
+    lng:parseCoordinate(lngRaw),
+    lat_raw:latRaw,
+    lng_raw:lngRaw,
     body:b||'',
     img_url:imgDataUrl||null,
   };
+  
   try{
-    await addEntry(entry);
-    showForm=false;imgDataUrl=null;renderPanel(activeSection);
+    if(editingId){
+      await updateEntry(editingId, entry);
+    }else{
+      await addEntry(entry);
+    }
+    showForm=false; imgDataUrl=null; editingId=null; renderPanel(activeSection);
   }catch(err){
     const errEl=document.getElementById('save-err');
-    if(errEl)errEl.textContent='保存失败，请检查 Supabase 表格是否建好';
-    btn.disabled=false;btn.textContent='保存到宇宙 ✦';
+    if(errEl)errEl.textContent='保存失败，请检查网络或数据库连接';
+    btn.disabled=false; btn.textContent=editingId?'更新':'保存到宇宙 ✦';
   }
 }
 
-function openDetail(jsonStr){
-  const e=JSON.parse(jsonStr);
-  const s=SEC[activeSection];
-  document.getElementById('panel-content').innerHTML=`
-    <button class="back-btn" onclick="renderPanel('${activeSection}')">← 返回</button>
-    ${e.img_url?`<img class="detail-img" src="${e.img_url}"/>`:`<div style="font-size:42px;text-align:center;margin-bottom:14px;">${s.emoji}</div>`}
-    <div class="detail-title">${e.title||'无题'}</div>
-    <div class="detail-meta">${e.date||''} ${e.place?'· '+e.place:''}</div>
-    <div class="detail-body">${(e.body||'').replace(/\n/g,'<br>')}</div>`;
+function openDetail(encodedStr){
+  try {
+    const e=JSON.parse(base64ToUtf8(encodedStr));
+    const s=SEC[activeSection] || SEC.memories;
+    document.getElementById('panel-content').innerHTML=`
+      <button class="back-btn" onclick="renderPanel('${activeSection}')">← 返回</button>
+      ${e.img_url?`<img class="detail-img" src="${e.img_url}"/>`:`<div style="font-size:42px;text-align:center;margin-bottom:14px;">${s.emoji}</div>`}
+      <div class="detail-title">${e.title||'无题'}</div>
+      <div class="detail-meta">${e.date||''} ${e.place?'· '+e.place:''}</div>
+      <div class="detail-body">${(e.body||'').replace(/\n/g,'<br>')}</div>
+      <div class="detail-actions">
+        <button onclick="editEntryFromDetail('${e.id}')">✎ 编辑</button>
+        <button onclick="deleteEntryFromDetail('${e.id}')" style="border-color:rgba(255,80,80,0.2);">✕ 删除</button>
+      </div>`;
+  } catch(err) {
+    console.error('打开详情失败:', err);
+    alert('无法打开详情，数据可能已损坏');
+  }
+}
+
+function editEntryFromDetail(id){
+  renderPanel(activeSection);
+  setTimeout(()=>editEntry(id),100);
+}
+
+function deleteEntryFromDetail(id){
+  deleteEntryConfirm(id);
 }
 </script>
 </body>
